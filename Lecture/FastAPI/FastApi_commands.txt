@@ -1,0 +1,2 @@
+uvicorn FastAPI_test:app -- lounch FastApi framework
+uvicorn main:app --reload  ----> reload mode (when code has been changed)

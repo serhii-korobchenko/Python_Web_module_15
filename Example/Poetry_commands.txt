@@ -1,0 +1,10 @@
+poetry new solution -- new project ---> named solution
+poetry shell -- virtual enviroment activation
+poetry add aiosqlite -- add new module
+poetry add pytest --dev  ----> add module for development
+poetry remove aiosqlite ----> delete module
+poetry show -- list of installed packages
+
+
+
+
