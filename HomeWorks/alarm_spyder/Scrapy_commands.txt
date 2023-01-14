@@ -14,3 +14,5 @@ scrapy  crawl  quotes  -O  quotes.json
 scrapy  crawl  quotes  -o  quotes.jsonl
 scrapy crawl authors_detail
 scrapy crawl air_raid_alarms_kyiv
+scrapy crawl news
+

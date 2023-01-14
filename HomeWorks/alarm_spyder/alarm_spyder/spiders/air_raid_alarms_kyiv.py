@@ -19,11 +19,11 @@ class AirRaidAlarmsKyivSpider(scrapy.Spider):
                 'overwrite': True,
 
             },
-        },
-
-        "SPIDER_MIDDLEWARES": {
-            'alarm_spyder.middlewares.AlarmSpyderSpiderMiddleware': 543,
         }
+
+        # "SPIDER_MIDDLEWARES": {
+        #     'alarm_spyder.middlewares.AlarmSpyderSpiderMiddleware': 543,
+        # }
     }
     # stop custom settings
 
