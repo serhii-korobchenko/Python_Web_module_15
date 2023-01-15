@@ -9,6 +9,7 @@ from itemadapter import ItemAdapter
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import sessionmaker
 from .models import db_connect, create_table, Alarm, News
+from datetime import datetime
 
 
 class AlarmSpyderPipeline:
@@ -31,32 +32,33 @@ class AlarmSpyderPipeline:
 
         alarm = Alarm()
         alarm.name = item["result"][0]
-        alarm.start_time = item["result"][1]
-        alarm.finish_time = item["result"][2]
+        alarm.start_time = datetime.strptime(item["result"][1], '%d.%m.%y %H:%M')
+        alarm.finish_time = datetime.strptime(item["result"][2], '%d.%m.%y %H:%M')
 
 
 
         # check whether the alarm exists
         exist_alarm = session.query(Alarm).filter_by(name=alarm.name).first()
         try:
-            if exist_alarm is None:  # the current author exists
+            if exist_alarm is None:  # the current alarm exists
 
                 session.add(alarm)
+                session.commit()
 
             #print(f"--------->  {session.query(Author).filter_by(name=author.name).first().id}")
-            quote.author_id = session.query(Author).filter_by(name=author.name).first().id
-            session.add(quote)
-            session.commit()
+            # quote.author_id = session.query(Author).filter_by(name=author.name).first().id
+            # session.add(quote)
+            # session.commit()
 
 
-            for tag_item in item["keywords"]:
-                exist_tag = session.query(Tag).filter_by(name=tag_item).first()
-                if exist_tag is None:
-                    tag = Tag()
-                    tag.name = tag_item
-                    tag.quote_id = session.query(Quote).filter_by(quote_content=quote.quote_content).first().id
-                    session.add(tag)
-                    session.commit()
+            # for tag_item in item["keywords"]:
+            #     exist_tag = session.query(Tag).filter_by(name=tag_item).first()
+            #     if exist_tag is None:
+            #         tag = Tag()
+            #         tag.name = tag_item
+            #         tag.quote_id = session.query(Quote).filter_by(quote_content=quote.quote_content).first().id
+            #         session.add(tag)
+            #         session.commit()
 
 
         except:
@@ -68,7 +70,7 @@ class AlarmSpyderPipeline:
 
         return item
 
-class SerhiiSpyderBotPipelineDetail:
+class NewsSpyderPipeline:
 
 
     def __init__(self):
@@ -85,27 +87,34 @@ class SerhiiSpyderBotPipelineDetail:
         """
         session = self.Session()
 
-        new_author = Author()
-        new_author.name = item["author"][0]
-        new_author.id = session.query(Author).filter_by(name=new_author.name).first().id
-        new_author.ref = session.query(Author).filter_by(name=new_author.name).first().ref
-        new_author.birthday = item["birthday"][0]
-        new_author.bornlocation = item["bornlocation"][0]
+        # date reversing
+        print(f'Date time------------->{"".join(item["date_time"])}')
+        date_temp_list = "".join(item["date_time"]).split(', ')
+        reversed_date = str(date_temp_list[1]) + " " + str(date_temp_list[0])
+        print(f'Reversed date------------->{reversed_date}')
+        print(f'news_content------------->{type(item["news_title"])}')
+        print(f'news_ref------------->{type(item["news_ref"])}')
 
-        # check whether the author exists
-        exist_author = session.query(Author).filter_by(name=new_author.name).first()
+
+
+
+        news = News()
+        news.news_content = "".join(item["news_title"])
+        news.news_time = datetime.strptime(reversed_date, '%d.%m.%Y %H:%M')
+        news.ref = "".join(item["news_ref"])
+
+
+
+
+        # check whether the news exists
+        exist_news = session.query(News).filter_by(ref=news.ref).first()
+        #print(f'=============================> {exist_news}')
         try:
-            if exist_author is not None:  # the current author exists
+            if exist_news is None:  # the current author exists
 
-                session.delete(exist_author)
-                session.commit()
-                session.add(new_author)
+                session.add(news)
                 session.commit()
 
-
-            #print(f"--------->  {session.query(Author).filter_by(name=author.name).first().id}")
-
-            #session.commit()
 
 
         except:
@@ -113,6 +122,13 @@ class SerhiiSpyderBotPipelineDetail:
             raise
 
         finally:
+            #alarm_start_time =
+
+
+
+
+
+
             session.close()
 
         return item

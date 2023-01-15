@@ -7,7 +7,7 @@ import time
 from scrapy.selector import Selector
 
 
-pages = 4  # ----->  # pages for infinite scroll
+pages = 2  # ----->  # pages for infinite scroll
 class NewsSpider(scrapy.Spider):
     name = 'news'
 
@@ -15,7 +15,7 @@ class NewsSpider(scrapy.Spider):
     custom_settings = {
 
         'ITEM_PIPELINES': {
-        'alarm_spyder.pipelines.AlarmSpyderPipeline': 300
+        'alarm_spyder.pipelines.NewsSpyderPipeline': 400
                            },
 
         "FEEDS": {

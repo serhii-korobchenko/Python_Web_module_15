@@ -1,10 +1,11 @@
-from sqlalchemy import create_engine, Column, Table, ForeignKey, MetaData
+from sqlalchemy import create_engine, Column, MetaData
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import (
     Integer, String, Date, DateTime, Float, Boolean, Text)
 from scrapy.utils.project import get_project_settings
 from datetime import datetime
+from sqlalchemy.sql.schema import ForeignKey, Table
 
 Base = declarative_base()
 
@@ -22,12 +23,15 @@ def create_table(engine):
 
 
 
-# # Association Table for Many-to-Many relationship between Quote and Tag
-# # https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#many-to-many
-# quote_tag = Table('quote_tag', Base.metadata,
-#     Column('quote_id', Integer, ForeignKey('quote.id')),
-#     Column('tag_id', Integer, ForeignKey('tag.id'))
-# )
+# Association Table for Many-to-Many relationship between Alarm and News
+# https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#many-to-many
+alarm_news = Table('alarm_news', Base.metadata,
+    Column("id", Integer, primary_key=True),
+    Column('alarm_id', Integer, ForeignKey('alarm.id')),
+    Column('news_id', Integer, ForeignKey('news.id'))
+                   )
+
+
 
 
 class Alarm(Base):
@@ -37,6 +41,7 @@ class Alarm(Base):
     name = Column('name', String(50), unique=False)
     start_time = Column('start_time', DateTime, default=datetime.now())
     finish_time = Column('finish_time',DateTime, default=datetime.now())
+    news = relationship("News", secondary = alarm_news, backref="alarm")
 
 
 
@@ -47,8 +52,8 @@ class News(Base):
     news_content = Column('news_content', Text())
     news_time = Column('news_time', DateTime, default=datetime.now())
     ref = Column('ref', String(200), unique=False)
-    alarm_id = Column(Integer, ForeignKey('alarm.id'))  # Many quotes to one author
-    alarm = relationship (Alarm)
+    #alarms = relationship("Alarm", secondary=alarm_news, backref="news")
+
 
 
 

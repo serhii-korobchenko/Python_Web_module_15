@@ -10,9 +10,9 @@ class AirRaidAlarmsKyivSpider(scrapy.Spider):
     custom_settings = {
 
 
-        # 'ITEM_PIPELINES': {
-        # 'serhii_spyder_bot.pipelines.SerhiiSpyderBotPipeline': 300
-        #                    },
+        'ITEM_PIPELINES': {
+        'alarm_spyder.pipelines.AlarmSpyderPipeline': 300
+                           },
 
         "FEEDS": {
             'alarm_info.json': {
@@ -41,11 +41,14 @@ class AirRaidAlarmsKyivSpider(scrapy.Spider):
         #     }
 
 
-        yield {
+        check_marker = response.xpath("/html/body/div[@class='wrapper']//td[2]/text()").extract()
 
-            "date_time": response.xpath("/html/body/div[@class='wrapper']//td[1]/text()").extract(),
-            "start_finish": response.xpath("/html/body/div[@class='wrapper']//td[2]/text()").extract()
-        }
+        for _ in range(10):
+            yield {
+
+                "date_time": response.xpath("/html/body/div[@class='wrapper']//td[1]/text()").extract(),
+                "start_finish": response.xpath("/html/body/div[@class='wrapper']//td[2]/text()").extract()
+            }
 
 
 configure_logging()
