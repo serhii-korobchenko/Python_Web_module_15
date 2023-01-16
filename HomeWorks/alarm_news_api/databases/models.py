@@ -9,7 +9,6 @@ from sqlalchemy.sql.schema import ForeignKey, Table
 
 Base = declarative_base()
 
-
 def db_connect():
     """
     Performs database connection using database settings from settings.py.
@@ -17,11 +16,8 @@ def db_connect():
     """
     return create_engine(get_project_settings().get("CONNECTION_STRING"))
 
-
 def create_table(engine):
     Base.metadata.create_all(engine)
-
-
 
 # Association Table for Many-to-Many relationship between Alarm and News
 # https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#many-to-many
@@ -30,10 +26,6 @@ alarm_news = Table('alarm_news', Base.metadata,
     Column('alarm_id', Integer, ForeignKey('alarm.id')),
     Column('news_id', Integer, ForeignKey('news.id'))
                    )
-
-
-
-
 class Alarm(Base):
     __tablename__ = "alarm"
 
@@ -42,8 +34,6 @@ class Alarm(Base):
     start_time = Column('start_time', DateTime, default=datetime.now())
     finish_time = Column('finish_time',DateTime, default=datetime.now())
     news = relationship("News", secondary = alarm_news, backref="alarm")
-
-
 
 class News(Base):
     __tablename__ = "news"
