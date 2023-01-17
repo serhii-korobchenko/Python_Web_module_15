@@ -42,7 +42,7 @@ class News(Base):
     news_content = Column('news_content', Text())
     news_time = Column('news_time', DateTime, default=datetime.now())
     ref = Column('ref', String(200), unique=False)
-    #alarms = relationship("Alarm", secondary=alarm_news, backref="news")
+
 
 
 

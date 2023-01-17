@@ -8,12 +8,8 @@ class NewsBase(BaseModel):
 
 
 
-# class NewsCreate(NewsBase):
-#     tags: List[int]
-#
-#
-# class NewsDone(BaseModel):
-#     done: bool
+class NewsUpdate(NewsBase):
+    news_time: datetime
 
 
 class News(NewsBase):
@@ -33,8 +29,10 @@ class AlarmBase(BaseModel):
 #     pass
 #
 #
-# class AlarmUpdate(AlarmBase):
-#     pass
+class AlarmUpdate(AlarmBase):
+    id: int
+    start_time: datetime
+    finish_time: datetime
 
 
 class Alarm(AlarmBase):
